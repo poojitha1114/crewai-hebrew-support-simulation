@@ -1,5 +1,5 @@
 """
-Merge Conversation Audio - Standalone script to merge individual audio files into complete conversation.
+Merge Conversation Audio  -  Standalone script to merge individual audio files into complete conversation.
 """
 
 import sys
