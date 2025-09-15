@@ -1,5 +1,5 @@
 """
-Main orchestration script for Hebrew customer service call simulation.
+Main orchestration script  for Hebrew customer service call simulation.
 Uses CrewAI Flow to coordinate all agents in the conversation loop.
 """
 
