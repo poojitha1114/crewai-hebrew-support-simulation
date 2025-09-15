@@ -1,5 +1,5 @@
 """
-Audio utilities for Hebrew customer service call simulation.
+Audio utilities  for Hebrew customer service call simulation.
 Handles audio file operations, format conversions, and validation.
 """
 
