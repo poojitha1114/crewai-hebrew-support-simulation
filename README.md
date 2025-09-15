@@ -168,7 +168,46 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 python main.py
 ```
 
-This runs a complete conversation simulation with default settings.
+This runs a complete conversation simulation with default settings and automatically generates merged audio with distinct male/female voices.
+
+### Listen to Generated Audio
+
+After running the conversation, you can listen to the audio in several ways:
+
+#### Option 1: Play Complete Merged Conversation (Recommended)
+```bash
+python play_conversation_audio.py
+```
+This plays the complete conversation with both Hebrew male voice (client) and Hebrew female voice (CSR), including audio markers.
+
+#### Option 2: Open Audio File Directly
+```bash
+# Windows
+start output\conversation_complete_conv_YYYYMMDD_HHMMSS_YYYYMMDD_HHMMSS.wav
+
+# macOS
+open output/conversation_complete_conv_YYYYMMDD_HHMMSS_YYYYMMDD_HHMMSS.wav
+
+# Linux
+xdg-open output/conversation_complete_conv_YYYYMMDD_HHMMSS_YYYYMMDD_HHMMSS.wav
+```
+
+#### Option 3: Manual Audio Merging
+```bash
+# Merge latest conversation
+python merge_conversation_audio.py
+
+# Merge specific conversation by ID
+python merge_conversation_audio.py conv_20241213_143022
+```
+
+### Audio Features
+- **Male Voice**: Hebrew client (customer) - `he-IL-AvriNeural`
+- **Female Voice**: Hebrew CSR (support agent) - `he-IL-HilaNeural`
+- **Audio Markers**: 
+  - Single beep = Client speaking
+  - Double beep = CSR speaking
+- **Complete Conversations**: All turns merged into one audio file
 
 ### Custom Configuration
 
