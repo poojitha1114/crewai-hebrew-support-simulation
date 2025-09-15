@@ -420,17 +420,6 @@ def execute_task(self, task: Task) -> ResponseModel
 def get_stats(self) -> Dict
 ```
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
@@ -440,17 +429,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [OpenAI Whisper](https://github.com/openai/whisper) - Speech recognition
 - [LiteLLM](https://github.com/BerriAI/litellm) - LLM integration
 
-## Support
 
-For issues and questions:
-1. Check the troubleshooting section
-2. Review the logs in `output/conversation.log`
-3. Open an issue on GitHub with:
-   - Error messages
-   - Configuration used
-   - Steps to reproduce
-
----
-
-**Note**: This is a simulation system for educational and testing purposes. Ensure you have proper permissions and comply with privacy regulations when processing real customer data.
-"# crewai-hebrew-support-simulation" 
