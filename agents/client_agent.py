@@ -1,6 +1,6 @@
 """
 ClientAgent: Simulates a customer trying to cancel their TV subscription.
-Uses NikudAgent and TTSAgent to produce Hebrew speech.
+Uses NikudAgent and TTSAgent to produce Hebrew speech. 
 """
 
 import logging
