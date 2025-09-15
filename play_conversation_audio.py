@@ -1,5 +1,5 @@
 """
-Simple Conversation Audio Player - Direct audio playback without webview dependencies.
+Simple Conversation  Audio Player - Direct audio playback without webview dependencies.
 """
 
 import os
