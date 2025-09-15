@@ -1,5 +1,5 @@
 """
-Simple Audio Merger - Alternative approach using wave module for audio concatenation.
+Simple  Audio Merger - Alternative approach using wave module for audio concatenation.
 """
 
 import os
