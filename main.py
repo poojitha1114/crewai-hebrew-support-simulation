@@ -1,5 +1,5 @@
 """
-Main orchestration script  for Hebrew customer service call simulation.
+Main orchestration script for Hebrew customer service call simulation.
 Uses CrewAI Flow to coordinate all agents in the conversation loop.
 """
 
@@ -405,23 +405,62 @@ def run_demo():
             logger.info(f"Total turns: {result.get('stats', {}).get('total_turns', 0)}")
             logger.info(f"Transcript: {result.get('transcript_path')}")
             
-            # Print summary
-            print("\n" + "="*50)
-            print("CONVERSATION SUMMARY")
-            print("="*50)
-            print(f"Conversation ID: {result.get('stats', {}).get('conversation_id')}")
-            print(f"Outcome: {result.get('outcome')}")
-            print(f"Total turns: {result.get('stats', {}).get('total_turns', 0)}")
-            print(f"Transcript saved: {result.get('transcript_path')}")
+            # Calculate conversation timing
+            stats = result.get('stats', {})
+            start_time = datetime.now()
             
-            # Token usage
-            token_stats = result.get('stats', {}).get('token_stats', {})
+            # Print comprehensive summary
+            print("\n" + "="*60)
+            print("🎯 HEBREW CUSTOMER SERVICE CONVERSATION SUMMARY")
+            print("="*60)
+            
+            # Basic conversation info
+            print(f"📋 Conversation ID: {stats.get('conversation_id', 'N/A')}")
+            print(f"🎭 Client Personality: {config.get('client_personality', 'N/A')}")
+            print(f"🏁 Outcome: {result.get('outcome', 'N/A')}")
+            print(f"🔄 Total Turns: {stats.get('total_turns', 0)}")
+            
+            # Token usage details
+            token_stats = stats.get('token_stats', {})
             if token_stats:
                 usage = token_stats.get('current_usage', {})
-                print(f"Tokens used: {usage.get('total_tokens_used', 0)}")
-                print(f"Summarizations: {usage.get('summarizations_triggered', 0)}")
+                budget = token_stats.get('budget', {})
+                print(f"\n💰 TOKEN USAGE:")
+                print(f"   Total Tokens Used: {usage.get('total_tokens_used', 0)}")
+                print(f"   Prompt Tokens: {usage.get('prompt_tokens', 0)}")
+                print(f"   Completion Tokens: {usage.get('completion_tokens', 0)}")
+                print(f"   Budget Limit: {budget.get('max_tokens_per_conversation', 0)}")
+                print(f"   Summarizations: {usage.get('summarizations_triggered', 0)}")
             
-            print("="*50)
+            # Agent statistics
+            client_stats = stats.get('client_stats', {})
+            csr_stats = stats.get('csr_stats', {})
+            if client_stats or csr_stats:
+                print(f"\n👥 AGENT PERFORMANCE:")
+                if client_stats:
+                    print(f"   Client Responses: {client_stats.get('total_responses', 0)}")
+                    print(f"   Client Frustration: {client_stats.get('final_frustration', 'N/A')}")
+                if csr_stats:
+                    print(f"   CSR Responses: {csr_stats.get('total_responses', 0)}")
+                    print(f"   Offers Made: {csr_stats.get('offers_made', 0)}")
+            
+            # Guardrail statistics
+            guardrail_stats = stats.get('guardrail_stats', {})
+            if guardrail_stats:
+                print(f"\n🛡️  GUARDRAILS:")
+                print(f"   Violations: {guardrail_stats.get('violation_count', 0)}")
+            
+            # File locations
+            print(f"\n📁 FILES GENERATED:")
+            print(f"   Transcript: {Path(result.get('transcript_path', '')).name}")
+            
+            # Audio files count
+            import glob
+            audio_files = glob.glob("output/*_turn_*.wav")
+            print(f"   Audio Files: {len(audio_files)} individual turn files")
+            
+            print("="*60)
+            print("⏱️  Ready for audio merging and timing...")
             
         else:
             logger.error(f"Demo failed: {result.get('error')}")
@@ -435,21 +474,53 @@ def merge_conversation_audio_post_demo():
     """Merge conversation audio files after demo completion."""
     try:
         from utils.conversation_audio_merger import merge_latest_conversation
+        import time
         
-        print("\nMerging conversation audio...")
+        print("\n🎵 AUDIO MERGING PROCESS")
+        print("="*40)
+        
+        # Start timing the audio merge process
+        merge_start_time = time.time()
+        print("⏱️  Starting audio merge timing...")
+        
         result = merge_latest_conversation()
         
-        print(f"Complete conversation audio created: {Path(result['merged_audio']).name}")
+        # Calculate merge duration
+        merge_end_time = time.time()
+        merge_duration = merge_end_time - merge_start_time
+        
+        print(f"\n✅ AUDIO MERGE COMPLETED:")
+        print(f"   📄 File: {Path(result['merged_audio']).name}")
+        print(f"   ⏱️  Merge Process Time: {merge_duration:.2f} seconds")
+        print(f"   📊 Summary: {Path(result['summary']).name}")
+        
+        # Read and display audio statistics
+        try:
+            import json
+            with open(result['summary'], 'r', encoding='utf-8') as f:
+                audio_stats = json.load(f)
+            
+            stats = audio_stats.get('statistics', {})
+            print(f"\n🎧 AUDIO STATISTICS:")
+            print(f"   Duration: {stats.get('duration_formatted', 'N/A')} ({stats.get('duration_seconds', 0):.1f}s)")
+            print(f"   Total Turns: {stats.get('total_turns', 0)}")
+            print(f"   Client Turns: {stats.get('client_turns', 0)}")
+            print(f"   CSR Turns: {stats.get('csr_turns', 0)}")
+            
+        except Exception as e:
+            logger.warning(f"Could not read audio statistics: {e}")
+        
+        print("="*40)
         logger.info(f"Merged conversation audio: {result['merged_audio']}")
         
         return result['merged_audio']
         
     except ImportError:
-        print("Audio merging requires pydub: pip install pydub")
+        print("❌ Audio merging requires pydub: pip install pydub")
         logger.warning("pydub not available for audio merging")
         return None
     except Exception as e:
-        print(f"Audio merging failed: {e}")
+        print(f"❌ Audio merging failed: {e}")
         logger.warning(f"Audio merging failed: {e}")
         return None
 
